@@ -1,6 +1,8 @@
 package com.myspring.fundamentals.controllers;
 
 import com.myspring.fundamentals.model.Post;
+import com.myspring.fundamentals.service.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,17 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class PostController {
 
-    @GetMapping("/posts")
-    public List<Post> getPosts(){
-        throw new IllegalArgumentException("Not implemented yet!");
+    private final PostService postService;
 
+    @GetMapping("/posts")
+    public List<Post> getPosts() {
+        return postService.getPosts();
     }
 
     @GetMapping("/posts/{id}")
-    public List<Post> getSinglePost(@PathVariable long id){
-        throw new IllegalArgumentException("Not implemented yet!");
+    public Post getSinglePost(@PathVariable long id) {
+        return postService.getSinglePost(id);
 
     }
 }
