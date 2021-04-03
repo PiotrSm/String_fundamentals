@@ -10,7 +10,13 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    @Query("select p from Post p"+
-                " left join fetch p.comments")
+    @Query("select p from Post p")
     List<Post> findAllPosts(Pageable page);//Pageable page - dodane stronicowanie
+
+//    @Query("select p from Post left join fetch p.comments")
+    //tak działa ale wgrywa wszystkie rekordy i dopiero przycina - nieefektywne
+
+//    @Query("select p from Post p")
+    //tak też działa ale pozostaje problem N+1 - za dużo selectów do comments
+
 }

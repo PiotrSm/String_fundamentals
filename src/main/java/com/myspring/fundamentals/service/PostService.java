@@ -13,11 +13,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
 
+    private static final int PAGE_SIZE = 20;
     private final PostRepository postRepository;
 
-    public List<Post> getPosts() {
+    public List<Post> getPosts(int page) {
         //PageRequest.of(0,3) - dodane stronicowanie do zwracanych wyników - zwraca tylko pierwsze 3
-        List<Post> postList = postRepository.findAllPosts(PageRequest.of(0,3));
+        List<Post> postList = postRepository.findAllPosts(PageRequest.of(page, PAGE_SIZE));
         return postList;
     }
 
