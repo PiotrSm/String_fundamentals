@@ -6,6 +6,7 @@ import com.myspring.fundamentals.repository.CommentRepository;
 import com.myspring.fundamentals.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -21,9 +22,10 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public List<Post> getPosts(int page) {
+    public List<Post> getPosts(int page, Sort.Direction sort) {
         //PageRequest.of(0,3) - dodane stronicowanie do zwracanych wyników - zwraca tylko pierwsze 3
-        List<Post> postList = postRepository.findAllPosts(PageRequest.of(page, PAGE_SIZE));
+        ;
+        List<Post> postList = postRepository.findAllPosts(PageRequest.of(page, PAGE_SIZE, Sort.by(sort, "id")));
         return postList;
     }
 
@@ -31,8 +33,8 @@ public class PostService {
         return postRepository.findById(id).orElseThrow();
     }
 
-    public List<Post> getPostsWithComments(int page) {
-        List<Post> postList = postRepository.findAllPosts(PageRequest.of(page, PAGE_SIZE));
+    public List<Post> getPostsWithComments(int page, Sort.Direction sort) {
+        List<Post> postList = postRepository.findAllPosts(PageRequest.of(page, PAGE_SIZE,Sort.by(sort, "id")));
         List<Long> ids = postList.stream().map(Post::getId).collect(Collectors.toList());
         List<Comment> comments = commentRepository.findByPostIdIn(ids);
         postList.forEach(post -> post.setComments(extractComments(comments, post.getId())));
@@ -41,7 +43,7 @@ public class PostService {
 
     private List<Comment> extractComments(List<Comment> comments, long id) {
         return comments.stream()
-                .filter( comment -> comment.getPostId() == id)
+                .filter(comment -> comment.getPostId() == id)
                 .collect(Collectors.toList());
     }
 }
