@@ -26,6 +26,12 @@ public class PostController {
         return mapToPostDtos(postService.getPosts(pageNumber));//aby uniknąć problemu N+1 i wielu podzapytań musimy przemapowac Post do PostDto
     }
 
+    @GetMapping("/posts/comments")
+    public List<Post> getPostsWithComments(@RequestParam(required = false) int page) {
+        int pageNumber = page >= 0 ? page : 0;
+        return postService.getPostsWithComments(pageNumber);
+    }
+
     @GetMapping("/posts/{id}")
     public Post getSinglePost(@PathVariable long id) {
         return postService.getSinglePost(id);
