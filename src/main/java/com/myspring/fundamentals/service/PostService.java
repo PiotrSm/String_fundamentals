@@ -46,4 +46,19 @@ public class PostService {
                 .filter(comment -> comment.getPostId() == id)
                 .collect(Collectors.toList());
     }
+
+    public Post addPost(Post post) {
+        return postRepository.save(post);
+    }
+
+    public Post editPost(Post post) {
+        Post editedPost = postRepository.findById(post.getId()).orElseThrow();
+        editedPost.setContent(post.getContent());
+        editedPost.setTitle(post.getTitle());
+        return postRepository.save(editedPost);// hibernate powinien sam updatowac post - mechanizm dirty checking, ale nie działa
+    }
+
+    public void deletePost(long id) {
+        postRepository.deleteById(id);
+    }
 }
